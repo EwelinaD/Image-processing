@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>730</width>
+    <height>610</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>730</width>
+    <height>610</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="ImageView" name="images" native="true">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>10</y>
+      <width>440</width>
+      <height>590</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="OptionsView" name="options" native="true">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>250</width>
+      <height>590</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>250</width>
+      <height>590</height>
+     </size>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>ImageView</class>
+   <extends>QWidget</extends>
+   <header>imageview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>OptionsView</class>
+   <extends>QWidget</extends>
+   <header>optionsview.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OptionsView</class>
+ <widget class="QWidget" name="OptionsView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>250</width>
+    <height>590</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>250</width>
+    <height>590</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QPushButton" name="loadButton">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>210</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Load Image</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="transformButton">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>550</y>
+     <width>210</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Transform Image</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="optionLabel">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>60</y>
+     <width>211</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Choose kind of transformation:</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
