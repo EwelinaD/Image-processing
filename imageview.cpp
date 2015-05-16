@@ -16,13 +16,15 @@ ImageView::~ImageView()
 
 void ImageView::showImage()
 {
-    imageObject = new QImage();
-    imageObject->load(optView->imagePath);
+    imageObject = new QImage(optView->imagePath,0);
+    //imageObject->load(optView->imagePath);
     image = QPixmap::fromImage(*imageObject);
     scene = new QGraphicsScene(this);
     scene->addPixmap(image);
     scene->setSceneRect(image.rect());
     ui->myImage->setScene(scene);
+
+    ui->myImage->fitInView(scene->sceneRect(),Qt::KeepAspectRatio);
 
 }
 
