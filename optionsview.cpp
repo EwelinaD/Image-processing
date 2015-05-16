@@ -31,12 +31,5 @@ void OptionsView::on_loadButton_clicked()
 
 void OptionsView::on_nearestButton_clicked(bool checked)
 {
-    if(checked)
-    {
-        ui->angleEdit->setEnabled(true);
-    }
-    else
-    {
-        ui->angleEdit->setDisabled(false);
-    }
+    ui->angleEdit->setEnabled(checked);
 }
