@@ -58,6 +58,42 @@
     <string>Choose kind of transformation:</string>
    </property>
   </widget>
+  <widget class="QRadioButton" name="nearestButton">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>90</y>
+     <width>82</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>nearest</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="angleEdit">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>120</y>
+     <width>113</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="angleLabel">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>120</y>
+     <width>47</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>angle:</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

@@ -31,6 +31,8 @@ public:
 private slots:
     void on_loadButton_clicked();
 
+    void on_nearestButton_clicked(bool checked);
+
 private:
     Ui::OptionsView *ui;
     ImageView* imView;
