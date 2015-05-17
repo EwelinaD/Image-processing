@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <iostream>
 #include <QString>
+#include <QGroupBox>
 
 #include "imageview.h"
 
@@ -33,9 +34,16 @@ private slots:
 
     void on_nearestButton_clicked(bool checked);
 
+    void on_kirschButton_clicked(bool checked);
+
+    void on_transformButton_clicked();
+
+    void on_imopenButton_clicked(bool checked);
+
 private:
     Ui::OptionsView *ui;
     ImageView* imView;
+    QImage* imageObject;
 
 };
 

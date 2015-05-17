@@ -20,7 +20,7 @@ class ImageView : public QWidget
 
 public:
     explicit ImageView(QWidget *parent = 0);
-    void showImage();
+    void showImage(QImage*);
     void setOptView(OptionsView*);
     ~ImageView();
 

@@ -6,19 +6,27 @@ ImageView::ImageView(QWidget *parent) :
     ui(new Ui::ImageView)
 {
     ui->setupUi(this);
+    scene=NULL;
 }
 
 ImageView::~ImageView()
 {
     delete ui;
-    delete imageObject;
+    //delete imageObject;
+
+    if(scene!=NULL)
+        delete scene;
 }
 
-void ImageView::showImage()
+void ImageView::showImage(QImage* im)
 {
-    imageObject = new QImage(optView->imagePath,0);
-    //imageObject->load(optView->imagePath);
+    //imageObject = new QImage(optView->imagePath,0);
+    imageObject = im;
     image = QPixmap::fromImage(*imageObject);
+
+    if(scene!=NULL)
+        delete scene;
+
     scene = new QGraphicsScene(this);
     scene->addPixmap(image);
     scene->setSceneRect(image.rect());
