@@ -21,14 +21,18 @@ class ImageView : public QWidget
 public:
     explicit ImageView(QWidget *parent = 0);
     void showImage(QImage*);
+    void showTransform(QImage*);
     void setOptView(OptionsView*);
     ~ImageView();
 
 private:
         Ui::ImageView *ui;
         QPixmap image;
+        QPixmap transformImage;
         QImage  *imageObject;
+        QImage *transformObject;
         QGraphicsScene *scene;
+        QGraphicsScene *transformScene;
         OptionsView* optView;
 };
 

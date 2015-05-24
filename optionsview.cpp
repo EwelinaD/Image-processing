@@ -8,9 +8,11 @@ OptionsView::OptionsView(QWidget *parent) :
     ui(new Ui::OptionsView)
 {
     ui->setupUi(this);
+    imageObject=NULL;
+    qim=NULL;
+
     ui->angleEdit->setDisabled(true);
     ui->sizeEdit->setDisabled(true);
-    imageObject=NULL;
     ui->nearestButton->setCheckable(false);
     ui->kirschButton->setCheckable(false);
     ui->imopenButton->setCheckable(false);
@@ -21,12 +23,22 @@ OptionsView::~OptionsView()
     delete ui;
     if(imageObject!=NULL)
         delete imageObject;
+
+    if(qim!=NULL)
+        delete qim;
 }
 
 void OptionsView::setimView(ImageView * im)
 {
     imView=im;
 }
+
+void OptionsView::createBlackImage(int w, int h)
+{
+    qim = new QImage(w,h,QImage::Format_RGB32);
+    qim->fill(0);
+}
+
 
 void OptionsView::on_loadButton_clicked()
 {
@@ -52,6 +64,10 @@ void OptionsView::on_nearestButton_clicked(bool checked)
     {
         ui->nearestButton->setCheckable(true);
         ui->angleEdit->setEnabled(checked);
+
+        createBlackImage(imageObject->width(),imageObject->height());
+        imView->showTransform(qim);
+
     }
 
 }
@@ -59,9 +75,8 @@ void OptionsView::on_nearestButton_clicked(bool checked)
 void OptionsView::on_kirschButton_clicked(bool checked)
 {
     if(imageObject==NULL)
-    {
         return;
-    }
+
     else
     {
         ui->kirschButton->setCheckable(true);
@@ -72,9 +87,8 @@ void OptionsView::on_kirschButton_clicked(bool checked)
 void OptionsView::on_imopenButton_clicked(bool checked)
 {
     if(imageObject==NULL)
-    {
         return;
-    }
+
     else
     {
         ui->imopenButton->setCheckable(true);
