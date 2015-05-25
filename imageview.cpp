@@ -8,23 +8,24 @@ ImageView::ImageView(QWidget *parent) :
     ui->setupUi(this);
     scene=NULL;
     transformScene=NULL;
+    transformObject=NULL;
+    imageObject=NULL;
 }
 
 ImageView::~ImageView()
 {
     delete ui;
-    //delete imageObject;
 
     if(scene!=NULL)
         delete scene;
 
     if(transformScene!=NULL)
         delete transformScene;
+
 }
 
 void ImageView::showImage(QImage* im)
 {
-    //imageObject = new QImage(optView->imagePath,0);
     imageObject = im;
     image = QPixmap::fromImage(*imageObject);
 
@@ -35,9 +36,7 @@ void ImageView::showImage(QImage* im)
     scene->addPixmap(image);
     scene->setSceneRect(image.rect());
     ui->myImage->setScene(scene);
-
     ui->myImage->fitInView(scene->sceneRect(),Qt::KeepAspectRatio);
-
 }
 
 void ImageView::showTransform(QImage *im)

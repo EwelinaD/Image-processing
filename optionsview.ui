@@ -71,16 +71,6 @@
     <string>nearest</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="angleEdit">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>120</y>
-     <width>115</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="angleLabel">
    <property name="geometry">
     <rect>
@@ -154,6 +144,16 @@
    </property>
    <property name="text">
     <string>size:</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="angleSpinBox">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>120</y>
+     <width>60</width>
+     <height>25</height>
+    </rect>
    </property>
   </widget>
  </widget>

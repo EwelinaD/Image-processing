@@ -9,9 +9,10 @@ OptionsView::OptionsView(QWidget *parent) :
 {
     ui->setupUi(this);
     imageObject=NULL;
-    qim=NULL;
+    pBlackImag=NULL;
+    imView=NULL;
 
-    ui->angleEdit->setDisabled(true);
+    ui->angleSpinBox->setDisabled(true);
     ui->sizeEdit->setDisabled(true);
     ui->nearestButton->setCheckable(false);
     ui->kirschButton->setCheckable(false);
@@ -24,8 +25,8 @@ OptionsView::~OptionsView()
     if(imageObject!=NULL)
         delete imageObject;
 
-    if(qim!=NULL)
-        delete qim;
+    if(pBlackImag!=NULL)
+        delete pBlackImag;
 }
 
 void OptionsView::setimView(ImageView * im)
@@ -35,10 +36,12 @@ void OptionsView::setimView(ImageView * im)
 
 void OptionsView::createBlackImage(int w, int h)
 {
-    qim = new QImage(w,h,QImage::Format_RGB32);
-    qim->fill(0);
-}
+    if(pBlackImag!=NULL)
+        delete pBlackImag;
 
+    pBlackImag = new QImage(w,h,QImage::Format_RGB32);
+    pBlackImag->fill(0);
+}
 
 void OptionsView::on_loadButton_clicked()
 {
@@ -49,7 +52,6 @@ void OptionsView::on_loadButton_clicked()
         delete imageObject;
 
     imageObject = new QImage(imagePath,0);
-    //imageObject->convertToFormat(QImage::Format_RGB32);
     imView->showImage(imageObject);
     ui->nearestButton->setCheckable(true);
 
@@ -63,11 +65,7 @@ void OptionsView::on_nearestButton_clicked(bool checked)
     else
     {
         ui->nearestButton->setCheckable(true);
-        ui->angleEdit->setEnabled(checked);
-
-        createBlackImage(imageObject->width(),imageObject->height());
-        imView->showTransform(qim);
-
+        ui->angleSpinBox->setEnabled(checked);
     }
 
 }
@@ -96,11 +94,51 @@ void OptionsView::on_imopenButton_clicked(bool checked)
     }
 }
 
+void OptionsView::coordsNearest(int x, int y, int aa)
+{
+    double alpha = (double)aa*0.017454;
+    double r = sqrt(x*x+y*y);
+    double beta = atan((double)x/y)-alpha;
+
+    double xs = r*sin(beta);       //x coord of source image
+    double ys = r*cos(beta);
+
+    if(( xs > 0) && (xs < imageObject->width()) && (ys >0) && (ys <imageObject->height())){
+    int px = imageObject->pixel(xs,ys);
+    pBlackImag->setPixel(x,y,px);
+    }
+}
+
+void OptionsView::nearestInterpolation()
+{
+    int alpha = ui->angleSpinBox->value();
+    cout << alpha << endl;
+ /*   for(int x=(pBlackImag->width()/(-2)); x<(pBlackImag->width()/2); x++)
+    {
+        for(int y=(pBlackImag->height()/(-2)); y<(pBlackImag->height()/2); y++)
+        {
+            coordsNearest(x,y,alpha);
+        }
+    }*/
+
+       for(int x=0; x<pBlackImag->width(); x++)
+       {
+           for(int y=0; y<pBlackImag->height(); y++)
+           {
+               coordsNearest(x,y,alpha);
+           }
+       }
+}
+
 void OptionsView::on_transformButton_clicked()
 {
     if(ui->nearestButton->isChecked())
     {
         cout << "nearest" << endl;
+
+        createBlackImage(imageObject->width(),imageObject->height());
+        nearestInterpolation();
+        imView->showTransform(pBlackImag);
     }
 
     if (ui->kirschButton->isChecked())
@@ -112,4 +150,9 @@ void OptionsView::on_transformButton_clicked()
     {
         cout << "imopen" << endl;
     }
+}
+
+void OptionsView::on_saveButton_clicked()
+{
+
 }

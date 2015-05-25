@@ -17,6 +17,8 @@ class OptionsView;
 class ImageView : public QWidget
 {
     Q_OBJECT
+public:
+     QImage *transformObject;
 
 public:
     explicit ImageView(QWidget *parent = 0);
@@ -30,7 +32,7 @@ private:
         QPixmap image;
         QPixmap transformImage;
         QImage  *imageObject;
-        QImage *transformObject;
+
         QGraphicsScene *scene;
         QGraphicsScene *transformScene;
         OptionsView* optView;
