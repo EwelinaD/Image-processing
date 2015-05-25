@@ -96,16 +96,36 @@ void OptionsView::on_imopenButton_clicked(bool checked)
 
 void OptionsView::coordsNearest(int x, int y, int aa)
 {
-    double alpha = (double)aa*0.017454;
-    double r = sqrt(x*x+y*y);
-    double beta = atan((double)x/y)-alpha;
+    double xs,ys;
 
-    double xs = r*sin(beta);       //x coord of source image
-    double ys = r*cos(beta);
+    double alpha = -(double)aa*0.017454;
+    double shiftX=0.5*(imageObject->width()*cos(alpha)+imageObject->height()*sin(alpha)-imageObject->width());
+    double shiftY=0.5*(imageObject->width()*sin(alpha)+imageObject->height()*cos(alpha)-imageObject->height());
 
-    if(( xs > 0) && (xs < imageObject->width()) && (ys >0) && (ys <imageObject->height())){
-    int px = imageObject->pixel(xs,ys);
-    pBlackImag->setPixel(x,y,px);
+    shiftX=x+shiftX;
+   shiftY=y-shiftY;
+
+
+    double r = sqrt(shiftX*shiftX+shiftY*shiftY);
+    double beta = atan((double)shiftX/shiftY)-alpha;
+
+    if(y<255 && y>250)
+        cout << beta << endl;
+
+    if(beta<0)
+    {
+        beta+=3.14;
+    }
+
+        xs = r*sin(beta);       //x coord of source image
+        ys = r*cos(beta);
+
+
+
+    if(( xs > 0) && (xs < imageObject->width()) && (ys >0) && (ys <imageObject->height()))
+    {
+        int px = imageObject->pixel(xs,ys);
+        pBlackImag->setPixel(x,y,px);
     }
 }
 
