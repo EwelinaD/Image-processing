@@ -18,24 +18,23 @@ class ImageView : public QWidget
 {
     Q_OBJECT
 public:
-     QImage *transformObject;
+     QImage *dstImage;
 
 public:
     explicit ImageView(QWidget *parent = 0);
-    void showImage(QImage*);
-    void showTransform(QImage*);
+    void showSourceImage(QImage*);
+    void showDestImage(QImage*);
     void setOptView(OptionsView*);
     ~ImageView();
 
 private:
         Ui::ImageView *ui;
-        QPixmap image;
-        QPixmap transformImage;
-        QImage  *imageObject;
-
-        QGraphicsScene *scene;
-        QGraphicsScene *transformScene;
-        OptionsView* optView;
+        QPixmap sourceImageMap;           //pixmapa na zrodlowy obraz
+        QPixmap destImageMap;             //pixmapa na koncowy obraz
+        QImage  *srcImage;
+        QGraphicsScene *srcScene;
+        QGraphicsScene *destScene;
+        OptionsView* optView;               //wskaznik na widget optionsView
 };
 
 #endif // IMAGEVIEW_H

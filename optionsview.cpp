@@ -8,12 +8,12 @@ OptionsView::OptionsView(QWidget *parent) :
     ui(new Ui::OptionsView)
 {
     ui->setupUi(this);
-    imageObject=NULL;
-    pBlackImag=NULL;
+    sourceImage=NULL;
+    pDestImag=NULL;
     imView=NULL;
 
     ui->angleSpinBox->setDisabled(true);
-    ui->sizeEdit->setDisabled(true);
+    ui->sizeSpinBox->setDisabled(true);
     ui->nearestButton->setCheckable(false);
     ui->kirschButton->setCheckable(false);
     ui->imopenButton->setCheckable(false);
@@ -22,11 +22,11 @@ OptionsView::OptionsView(QWidget *parent) :
 OptionsView::~OptionsView()
 {
     delete ui;
-    if(imageObject!=NULL)
-        delete imageObject;
+    if(sourceImage!=NULL)
+        delete sourceImage;
 
-    if(pBlackImag!=NULL)
-        delete pBlackImag;
+    if(pDestImag!=NULL)
+        delete pDestImag;
 }
 
 void OptionsView::setimView(ImageView * im)
@@ -34,13 +34,13 @@ void OptionsView::setimView(ImageView * im)
     imView=im;
 }
 
-void OptionsView::createBlackImage(int w, int h)
+void OptionsView::createDestImage(int w, int h)
 {
-    if(pBlackImag!=NULL)
-        delete pBlackImag;
+    if(pDestImag!=NULL)
+        delete pDestImag;
 
-    pBlackImag = new QImage(w,h,QImage::Format_RGB32);
-    pBlackImag->fill(0);
+    pDestImag = new QImage(w,h,QImage::Format_RGB32);
+    pDestImag->fill(0);
 }
 
 void OptionsView::on_loadButton_clicked()
@@ -48,18 +48,18 @@ void OptionsView::on_loadButton_clicked()
     imagePath = QFileDialog::getOpenFileName(
                 this, tr("Open File"),"",tr("Images (*.png *.xpm *.jpg *.jpeg *.bmp *.tif"));
 
-    if(imageObject!=NULL)
-        delete imageObject;
+    if(sourceImage!=NULL)
+        delete sourceImage;
 
-    imageObject = new QImage(imagePath,0);
-    imView->showImage(imageObject);
+    sourceImage = new QImage(imagePath,0);
+    imView->showSourceImage(sourceImage);
     ui->nearestButton->setCheckable(true);
 
 }
 
 void OptionsView::on_nearestButton_clicked(bool checked)
 {
-    if(imageObject==NULL)
+    if(sourceImage==NULL)
         return;
 
     else
@@ -72,7 +72,7 @@ void OptionsView::on_nearestButton_clicked(bool checked)
 
 void OptionsView::on_kirschButton_clicked(bool checked)
 {
-    if(imageObject==NULL)
+    if(sourceImage==NULL)
         return;
 
     else
@@ -84,13 +84,13 @@ void OptionsView::on_kirschButton_clicked(bool checked)
 
 void OptionsView::on_imopenButton_clicked(bool checked)
 {
-    if(imageObject==NULL)
+    if(sourceImage==NULL)
         return;
 
     else
     {
         ui->imopenButton->setCheckable(true);
-        ui->sizeEdit->setEnabled(checked);
+        ui->sizeSpinBox->setEnabled(checked);
     }
 }
 
@@ -99,8 +99,8 @@ void OptionsView::coordsNearest(int x, int y, int aa)
     double xs,ys;
 
     double alpha = -(double)aa*0.017454;
-    double shiftX=0.5*(imageObject->width()*cos(alpha)+imageObject->height()*sin(alpha)-imageObject->width());
-    double shiftY=0.5*(imageObject->width()*sin(alpha)+imageObject->height()*cos(alpha)-imageObject->height());
+    double shiftX=0.5*(sourceImage->width()*cos(alpha)+sourceImage->height()*sin(alpha)-sourceImage->width());
+    double shiftY=0.5*(sourceImage->width()*sin(alpha)+sourceImage->height()*cos(alpha)-sourceImage->height());
 
     shiftX=x+shiftX;
    shiftY=y-shiftY;
@@ -122,10 +122,10 @@ void OptionsView::coordsNearest(int x, int y, int aa)
 
 
 
-    if(( xs > 0) && (xs < imageObject->width()) && (ys >0) && (ys <imageObject->height()))
+    if(( xs > 0) && (xs < sourceImage->width()) && (ys >0) && (ys <sourceImage->height()))
     {
-        int px = imageObject->pixel(xs,ys);
-        pBlackImag->setPixel(x,y,px);
+        int px = sourceImage->pixel(xs,ys);
+        pDestImag->setPixel(x,y,px);
     }
 }
 
@@ -141,9 +141,9 @@ void OptionsView::nearestInterpolation()
         }
     }*/
 
-       for(int x=0; x<pBlackImag->width(); x++)
+       for(int x=0; x<pDestImag->width(); x++)
        {
-           for(int y=0; y<pBlackImag->height(); y++)
+           for(int y=0; y<pDestImag->height(); y++)
            {
                coordsNearest(x,y,alpha);
            }
@@ -156,9 +156,9 @@ void OptionsView::on_transformButton_clicked()
     {
         cout << "nearest" << endl;
 
-        createBlackImage(imageObject->width(),imageObject->height());
+        createDestImage(sourceImage->width(),sourceImage->height());
         nearestInterpolation();
-        imView->showTransform(pBlackImag);
+        imView->showDestImage(pDestImag);
     }
 
     if (ui->kirschButton->isChecked())
@@ -175,5 +175,5 @@ void OptionsView::on_transformButton_clicked()
 void OptionsView::on_saveButton_clicked()
 {
     QString imagePath = QFileDialog::getSaveFileName(this);
-    pBlackImag->save(imagePath);
+    pDestImag->save(imagePath);
 }

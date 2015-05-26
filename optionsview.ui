@@ -123,16 +123,6 @@
     <string>imopen</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="sizeEdit">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>240</y>
-     <width>115</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="sizeLabel">
    <property name="geometry">
     <rect>
@@ -152,6 +142,19 @@
      <x>60</x>
      <y>120</y>
      <width>60</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="maximum">
+    <number>360</number>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="sizeSpinBox">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>240</y>
+     <width>50</width>
      <height>25</height>
     </rect>
    </property>

@@ -6,52 +6,52 @@ ImageView::ImageView(QWidget *parent) :
     ui(new Ui::ImageView)
 {
     ui->setupUi(this);
-    scene=NULL;
-    transformScene=NULL;
-    transformObject=NULL;
-    imageObject=NULL;
+    srcScene=NULL;
+    destScene=NULL;
+    dstImage=NULL;
+    srcImage=NULL;
 }
 
 ImageView::~ImageView()
 {
     delete ui;
 
-    if(scene!=NULL)
-        delete scene;
+    if(srcScene!=NULL)
+        delete srcScene;
 
-    if(transformScene!=NULL)
-        delete transformScene;
+    if(destScene!=NULL)
+        delete destScene;
 
 }
 
-void ImageView::showImage(QImage* im)
+void ImageView::showSourceImage(QImage* im)
 {
-    imageObject = im;
-    image = QPixmap::fromImage(*imageObject);
+    srcImage = im;
+    sourceImageMap = QPixmap::fromImage(*srcImage);
 
-    if(scene!=NULL)
-        delete scene;
+    if(srcScene!=NULL)
+        delete srcScene;
 
-    scene = new QGraphicsScene(this);
-    scene->addPixmap(image);
-    scene->setSceneRect(image.rect());
-    ui->myImage->setScene(scene);
-    ui->myImage->fitInView(scene->sceneRect(),Qt::KeepAspectRatio);
+    srcScene = new QGraphicsScene(this);
+    srcScene->addPixmap(sourceImageMap);
+    srcScene->setSceneRect(sourceImageMap.rect());
+    ui->myImage->setScene(srcScene);
+    ui->myImage->fitInView(srcScene->sceneRect(),Qt::KeepAspectRatio);
 }
 
-void ImageView::showTransform(QImage *im)
+void ImageView::showDestImage(QImage *im)
 {
-    transformObject=im;
-    transformImage=QPixmap::fromImage(*transformObject);
+    dstImage=im;
+    destImageMap=QPixmap::fromImage(*dstImage);
 
-    if(transformScene!=NULL)
-        delete transformScene;
+    if(destScene!=NULL)
+        delete destScene;
 
-    transformScene = new QGraphicsScene(this);
-    transformScene->addPixmap(transformImage);
-    transformScene->setSceneRect(transformImage.rect());
-    ui->viewTransform->setScene(transformScene);
-    ui->viewTransform->fitInView(transformScene->sceneRect(),Qt::KeepAspectRatio);
+    destScene = new QGraphicsScene(this);
+    destScene->addPixmap(destImageMap);
+    destScene->setSceneRect(destImageMap.rect());
+    ui->viewTransform->setScene(destScene);
+    ui->viewTransform->fitInView(destScene->sceneRect(),Qt::KeepAspectRatio);
 
 }
 

@@ -27,7 +27,7 @@ public:
 public:
     explicit OptionsView(QWidget *parent = 0);
     void setimView(ImageView*);
-    void createBlackImage(int,int);
+    void createDestImage(int,int);
     void nearestInterpolation();
     void coordsNearest(int,int,int);
     ~OptionsView();
@@ -42,9 +42,9 @@ private slots:
 
 private:
     Ui::OptionsView *ui;
-    ImageView* imView;
-    QImage* imageObject;    //wskaznik na wczytany z pliku obraz
-    QImage* pBlackImag;            //wskaźnik na czarny kwadrat
+    ImageView* imView;              //wskaznik na widget imageView
+    QImage* sourceImage;            //wskaznik na wczytany z pliku obraz
+    QImage* pDestImag;              //wskaźnik na koncowy obraz (poczatkowo jest to czarny prostokat)
 
 };
 
