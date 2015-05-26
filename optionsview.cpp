@@ -174,5 +174,6 @@ void OptionsView::on_transformButton_clicked()
 
 void OptionsView::on_saveButton_clicked()
 {
-
+    QString imagePath = QFileDialog::getSaveFileName(this);
+    pBlackImag->save(imagePath);
 }
