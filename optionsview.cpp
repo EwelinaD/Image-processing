@@ -1,5 +1,6 @@
 #include "optionsview.h"
 #include "ui_optionsview.h"
+#include "elem_mask.h"
 
 using namespace std;
 
@@ -110,7 +111,7 @@ void OptionsView::coordsNearest(int x, int y, int aa)
     double beta = atan((double)shiftX/shiftY)-alpha;
 
     if(y<255 && y>250)
-        cout << beta << endl;
+     //   cout << beta << endl;
 
     if(beta<0)
     {
@@ -129,17 +130,59 @@ void OptionsView::coordsNearest(int x, int y, int aa)
     }
 }
 
+void OptionsView::erode(elem_mask* EM, QImage* tempImag)
+{
+    EM->setData(sourceImage);
+    for(int i=0; i < sourceImage->width();i++)
+        for(int j=0; j < sourceImage->height();j++)
+        {
+            EM->move(i,j);
+            if( EM->checkAnyWhitePixies() )
+            {
+                tempImag->setPixel(i,j,0xFFFFFFFF);
+            }
+        }
+}
+
+void OptionsView::dilate(elem_mask* EM, QImage* tempImag)
+{
+    EM->setData(pDestImag);
+    for(int i=0; i < pDestImag->width();i++)
+        for(int j=0; j < pDestImag->height();j++)
+        {
+            if(tempImag->pixel(i,j) == 0xFF000000)
+            {
+                EM->move(i,j);
+                EM->paintItBlack();
+            }
+        }
+}
+
+void OptionsView::openYourEyes()
+{
+    //reinitialize dest image
+    if( pDestImag != NULL)
+        delete pDestImag;
+    QImage* tempImag=new QImage(*sourceImage);
+
+    //create circular element and config it
+    elem_mask EM;
+    EM.setRadius( ui->sizeSpinBox->value() );
+
+    erode(&EM, tempImag);
+
+    //dilatation
+    pDestImag=new QImage(*tempImag);
+    dilate(&EM, tempImag);
+
+    //tideup n show
+    delete tempImag;
+    imView->showDestImage(pDestImag);
+}
+
 void OptionsView::nearestInterpolation()
 {
     int alpha = ui->angleSpinBox->value();
-    cout << alpha << endl;
- /*   for(int x=(pBlackImag->width()/(-2)); x<(pBlackImag->width()/2); x++)
-    {
-        for(int y=(pBlackImag->height()/(-2)); y<(pBlackImag->height()/2); y++)
-        {
-            coordsNearest(x,y,alpha);
-        }
-    }*/
 
        for(int x=0; x<pDestImag->width(); x++)
        {
@@ -152,6 +195,7 @@ void OptionsView::nearestInterpolation()
 
 void OptionsView::on_transformButton_clicked()
 {
+    elem_mask EM;
     if(ui->nearestButton->isChecked())
     {
         cout << "nearest" << endl;
@@ -169,6 +213,9 @@ void OptionsView::on_transformButton_clicked()
     if(ui->imopenButton->isChecked())
     {
         cout << "imopen" << endl;
+        openYourEyes();
+
+
     }
 }
 

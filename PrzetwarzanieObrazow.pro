@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     imageview.cpp \
-    optionsview.cpp
+    optionsview.cpp \
+    elem_mask.cpp
 
 HEADERS  += mainwindow.h \
     imageview.h \
-    optionsview.h
+    optionsview.h \
+    elem_mask.h
 
 FORMS    += mainwindow.ui \
     imageview.ui \

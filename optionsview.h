@@ -9,6 +9,7 @@
 #include <cmath>
 
 #include "imageview.h"
+#include "elem_mask.h"
 
 namespace Ui {
 class OptionsView;
@@ -30,8 +31,11 @@ public:
     void createDestImage(int,int);
     void nearestInterpolation();
     void coordsNearest(int,int,int);
+    void openYourEyes();
     ~OptionsView();
 
+    void erode(elem_mask* EM, QImage* tempImag);
+    void dilate(elem_mask* EM, QImage* tempImag);
 private slots:
     void on_loadButton_clicked();
     void on_nearestButton_clicked(bool checked);
