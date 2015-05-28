@@ -1,6 +1,7 @@
 #include "optionsview.h"
 #include "ui_optionsview.h"
 #include "elem_mask.h"
+#include "kirschfilter.h"
 
 using namespace std;
 
@@ -46,8 +47,7 @@ void OptionsView::createDestImage(int w, int h)
 
 void OptionsView::on_loadButton_clicked()
 {
-    imagePath = QFileDialog::getOpenFileName(
-                this, tr("Open File"),"",tr("Images (*.png *.xpm *.jpg *.jpeg *.bmp *.tif"));
+    imagePath = QFileDialog::getOpenFileName(this);
 
     if(sourceImage!=NULL)
         delete sourceImage;
@@ -55,6 +55,8 @@ void OptionsView::on_loadButton_clicked()
     sourceImage = new QImage(imagePath,0);
     imView->showSourceImage(sourceImage);
     ui->nearestButton->setCheckable(true);
+    ui->imopenButton->setCheckable(true);
+    ui->kirschButton->setCheckable(true);
 
 }
 
@@ -139,7 +141,7 @@ void OptionsView::erode(elem_mask* EM, QImage* tempImag)
             EM->move(i,j);
             if( EM->checkAnyWhitePixies() )
             {
-                tempImag->setPixel(i,j,0xFFFFFFFF);
+                tempImag->setPixel(i,j,0xFF000000);
             }
         }
 }
@@ -150,7 +152,7 @@ void OptionsView::dilate(elem_mask* EM, QImage* tempImag)
     for(int i=0; i < pDestImag->width();i++)
         for(int j=0; j < pDestImag->height();j++)
         {
-            if(tempImag->pixel(i,j) == 0xFF000000)
+            if(tempImag->pixel(i,j) == 0xFFFFFFFF)
             {
                 EM->move(i,j);
                 EM->paintItBlack();
@@ -198,8 +200,6 @@ void OptionsView::on_transformButton_clicked()
     elem_mask EM;
     if(ui->nearestButton->isChecked())
     {
-        cout << "nearest" << endl;
-
         createDestImage(sourceImage->width(),sourceImage->height());
         nearestInterpolation();
         imView->showDestImage(pDestImag);
@@ -207,15 +207,14 @@ void OptionsView::on_transformButton_clicked()
 
     if (ui->kirschButton->isChecked())
     {
-        cout << "Kirsch" << endl;
+       // KirschFilter kf;
+       // kf.nextMask();
+
     }
 
     if(ui->imopenButton->isChecked())
     {
-        cout << "imopen" << endl;
         openYourEyes();
-
-
     }
 }
 

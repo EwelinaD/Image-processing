@@ -16,12 +16,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     imageview.cpp \
     optionsview.cpp \
-    elem_mask.cpp
+    elem_mask.cpp \
+    kirschfilter.cpp
 
 HEADERS  += mainwindow.h \
     imageview.h \
     optionsview.h \
-    elem_mask.h
+    elem_mask.h \
+    kirschfilter.h
 
 FORMS    += mainwindow.ui \
     imageview.ui \
