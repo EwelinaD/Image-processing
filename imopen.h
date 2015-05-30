@@ -3,8 +3,9 @@
 #include <QPixmap>
 #include <QImage>
 #include <iostream>
+#include "optionsview.h"
 
-
+class OptionsView;
 class Imopen
 {
     int size;
@@ -12,6 +13,7 @@ class Imopen
     bool** structure;
     QImage* data;
     int posx,posy;
+    OptionsView* opv;
     void deleteStructure();
     bool coordinatesInRange(int x, int y);
 public:
@@ -22,6 +24,8 @@ public:
     void setRadius(int rad);
     void paintItBlack();
     bool checkAnyWhitePixies();
+    void setOptionsViewPtr(OptionsView* op);
+    void erode( QImage* tempImag);
 
 };
 

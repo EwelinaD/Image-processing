@@ -15,7 +15,7 @@ namespace Ui {
 class OptionsView;
 
 }
-
+class Imopen;
 class ImageView;
 
 class OptionsView : public QWidget
@@ -24,6 +24,9 @@ class OptionsView : public QWidget
 
 public:
     QString imagePath;
+    ImageView* imView;              //wskaznik na widget imageView
+    QImage* sourceImage;            //wskaznik na wczytany z pliku obraz
+    QImage* pDestImag;              //wskaźnik na koncowy obraz (poczatkowo jest to czarny prostokat)
 
 public:
     explicit OptionsView(QWidget *parent = 0);
@@ -34,7 +37,7 @@ public:
     void openImage();
     ~OptionsView();
 
-    void erode(Imopen* EM, QImage* tempImag);
+//    void erode(Imopen* EM, QImage* tempImag);
     void dilate(Imopen* EM, QImage* tempImag);
 private slots:
     void on_loadButton_clicked();
@@ -46,9 +49,6 @@ private slots:
 
 private:
     Ui::OptionsView *ui;
-    ImageView* imView;              //wskaznik na widget imageView
-    QImage* sourceImage;            //wskaznik na wczytany z pliku obraz
-    QImage* pDestImag;              //wskaźnik na koncowy obraz (poczatkowo jest to czarny prostokat)
 
 };
 

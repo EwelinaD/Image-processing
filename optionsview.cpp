@@ -131,7 +131,7 @@ void OptionsView::coordsNearest(int x, int y, int aa)
         pDestImag->setPixel(x,y,px);
     }
 }
-
+/*
 void OptionsView::erode(Imopen* EM, QImage* tempImag)
 {
     EM->setData(sourceImage);
@@ -145,7 +145,7 @@ void OptionsView::erode(Imopen* EM, QImage* tempImag)
             }
         }
 }
-
+*/
 void OptionsView::dilate(Imopen* EM, QImage* tempImag)
 {
     EM->setData(pDestImag);
@@ -170,8 +170,8 @@ void OptionsView::openImage()
     //create circular element and config it
     Imopen EM;
     EM.setRadius( ui->sizeSpinBox->value() );
-
-    erode(&EM, tempImag);
+    EM.setOptionsViewPtr(this);
+    EM.erode( tempImag);
 
     //dilatation
     pDestImag=new QImage(*tempImag);

@@ -135,3 +135,21 @@ bool Imopen::coordinatesInRange(int x, int y)
     return false;
 }
 
+void Imopen::erode( QImage* tempImag)
+{
+    setData(opv->sourceImage);
+    for(int i=0; i < opv->sourceImage->width();i++)
+        for(int j=0; j < opv->sourceImage->height();j++)
+        {
+            move(i,j);
+            if( checkAnyWhitePixies() )
+            {
+                tempImag->setPixel(i,j,0xFF000000);
+            }
+        }
+}
+
+void Imopen::setOptionsViewPtr(OptionsView* op)
+{
+    opv=op;
+}
