@@ -159,8 +159,12 @@ void OptionsView::on_transformButton_clicked()
 
     if (ui->kirschButton->isChecked())
     {
-       // KirschFilter kf;
-       // kf.nextMask();
+        KirschFilter kf;
+        kf.setKFsrcImage(sourceImage);
+        kf.setKFdestImag(&pDestImag);
+        kf.executeKirchOnWholeImage();
+        imView->showDestImage(pDestImag);
+
 
     }
 

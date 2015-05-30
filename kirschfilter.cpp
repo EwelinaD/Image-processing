@@ -18,8 +18,36 @@ int KirschFilter::valueOfCurrentMask()
 
 KirschFilter::KirschFilter()
 {
+    pKFsrcImage = NULL;
+    pKFdestImag = NULL;
     maskIndex=-1;
     nextMask();
+}
+
+void KirschFilter::executeKirchOnWholeImage()
+{
+
+    if( pKFsrcImage == NULL)
+        return;
+
+    if( pKFdestImag == NULL)
+        return;
+
+    if( *pKFdestImag != NULL)
+        delete *pKFdestImag;
+
+    *pKFdestImag = new QImage(pKFsrcImage->size(),QImage::Format_RGB32);
+
+    QRgb countedValue;
+    for(int i = 1 ; i < pKFsrcImage->width()-1 ;i++ )
+    {
+        for(int j = 1 ; j < pKFsrcImage->height()-1 ;j++ )
+        {
+            moveMask(i,j);
+            countedValue = getColorValue();
+            (*pKFdestImag)->setPixel(i,j,countedValue);
+        }
+    }
 }
 
 KirschFilter::~KirschFilter()
@@ -40,13 +68,6 @@ void KirschFilter::nextMask()
     {
         mask[(i+maskIndex+3)%8]=-3;
     }
-
-    /*
-    for(int i=0; i<8; i++)
-    {
-        cout << mask[i] << " " <<endl;
-    }
-    */
 }
 
 void KirschFilter::moveMask(int imagX, int imagY)
@@ -67,28 +88,24 @@ void KirschFilter::moveMask(int imagX, int imagY)
     sourceColor[7]=pKFsrcImage->pixel(imagX+1,imagY+1);
 }
 
-int KirschFilter::getMaximum()
+QRgb KirschFilter::getColorValue()
 {
-    int maxValue;
-    int tab[8];
+    int maxValue=0;
+    int valueUnderMask;
 
     for(int i=0; i<8; i++)
     {
-        tab[i]=valueOfCurrentMask();
+        valueUnderMask=valueOfCurrentMask();
         nextMask();
+        if(valueUnderMask>maxValue)
+            maxValue=valueUnderMask;
     }
 
-    maxValue=tab[0];
-    for(int i=1; i<8; i++)
-    {
-        if(tab[i]>maxValue)
-            maxValue=tab[i];
-    }
     return maxValue;
 
 }
 
-void KirschFilter::setKFdestImag(QImage *im)
+void KirschFilter::setKFdestImag(QImage **im)
 {
     pKFdestImag=im;
 }

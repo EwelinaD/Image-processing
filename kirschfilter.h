@@ -11,7 +11,7 @@ class KirschFilter
 
 private:
     QImage* pKFsrcImage;         //wskaznik na obraz zrodlowy
-    QImage* pKFdestImag;
+    QImage** pKFdestImag;
     int mask[8];
     int x;
     int y;
@@ -24,12 +24,12 @@ private:
 
 public:
     KirschFilter();
+    void executeKirchOnWholeImage();
     void setKFsrcImage(QImage* im);
     void nextMask();            //tworzy nowa maske
     void moveMask(int imagX, int imagY);
     QRgb getColorValue();       //zwraca kolor z operatora Kirscha
-    int getMaximum();
-    void setKFdestImag(QImage* im);
+    void setKFdestImag(QImage** im);
     ~KirschFilter();
 };
 
