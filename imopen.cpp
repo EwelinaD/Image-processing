@@ -149,6 +149,23 @@ void Imopen::erode( QImage* tempImag)
         }
 }
 
+
+void Imopen::dilate( QImage* tempImag)
+{
+    setData( opv->pDestImag );
+    for(int i=0; i < opv->pDestImag->width();i++)
+        for(int j=0; j <  opv->pDestImag->height();j++)
+        {
+            if(tempImag->pixel(i,j) == 0xFFFFFFFF)
+            {
+                move(i,j);
+                paintItBlack();
+            }
+        }
+}
+
+
+
 void Imopen::setOptionsViewPtr(OptionsView* op)
 {
     opv=op;

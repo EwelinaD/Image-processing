@@ -130,22 +130,7 @@ void OptionsView::coordsNearest(int x, int y, int aa)
         int px = sourceImage->pixel(xs,ys);
         pDestImag->setPixel(x,y,px);
     }
-}
-/*
-void OptionsView::erode(Imopen* EM, QImage* tempImag)
-{
-    EM->setData(sourceImage);
-    for(int i=0; i < sourceImage->width();i++)
-        for(int j=0; j < sourceImage->height();j++)
-        {
-            EM->move(i,j);
-            if( EM->checkAnyWhitePixies() )
-            {
-                tempImag->setPixel(i,j,0xFF000000);
-            }
-        }
-}
-*/
+}/*
 void OptionsView::dilate(Imopen* EM, QImage* tempImag)
 {
     EM->setData(pDestImag);
@@ -159,7 +144,7 @@ void OptionsView::dilate(Imopen* EM, QImage* tempImag)
             }
         }
 }
-
+*/
 void OptionsView::openImage()
 {
     //reinitialize dest image
@@ -175,7 +160,7 @@ void OptionsView::openImage()
 
     //dilatation
     pDestImag=new QImage(*tempImag);
-    dilate(&EM, tempImag);
+    EM.dilate(tempImag);
 
     //tideup n show
     delete tempImag;

@@ -27,6 +27,7 @@ public:
     void setOptionsViewPtr(OptionsView* op);
     void erode( QImage* tempImag);
 
+    void dilate(QImage *tempImag);
 };
 
 #endif // IMOPEN_H
