@@ -30,6 +30,7 @@ public:
     void moveMask(int imagX, int imagY);
     QRgb getColorValue();       //zwraca kolor z operatora Kirscha
     void setKFdestImag(QImage** im);
+    int maxColorByChannels(int a, int b);
     ~KirschFilter();
 };
 

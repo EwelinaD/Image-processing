@@ -107,7 +107,9 @@ void OptionsView::coordsNearest(int x, int y, int aa)
 
     double alpha = -(double)aa*0.017454;
     double shiftX=0.5*(sourceImage->width()*cos(alpha)+sourceImage->height()*sin(alpha)-sourceImage->width());
-    double shiftY=0.5*(sourceImage->width()*sin(alpha)+sourceImage->height()*cos(alpha)-sourceImage->height());
+  //  double shiftY=0.5*(sourceImage->width()*sin(alpha)+sourceImage->height()*cos(alpha)-sourceImage->height());
+//    double shiftY=sourceImage->width()*sin(alpha);
+    double shiftY=0.5*(sourceImage->width()*sin(alpha)+(1-cos(alpha))*sourceImage->height());
 
     shiftX=x+shiftX;
    shiftY=y-shiftY;
@@ -116,8 +118,7 @@ void OptionsView::coordsNearest(int x, int y, int aa)
     double r = sqrt(shiftX*shiftX+shiftY*shiftY);
     double beta = atan((double)shiftX/shiftY)-alpha;
 
-    if(y<255 && y>250)
-     //   cout << beta << endl;
+
 
     if(beta<0)
     {
