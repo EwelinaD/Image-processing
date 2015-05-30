@@ -103,9 +103,8 @@ void OptionsView::on_imopenButton_clicked(bool checked)
 
 void OptionsView::coordsNearest(int x, int y, int aa)
 {
-    double xs,ys;
-
-    double alpha = -(double)aa*0.017454;
+    double xs,ys,xss,yss;
+    double alpha = -(double)(aa%90)*0.017454;
     double shiftX=0.5*(sourceImage->width()*cos(alpha)+sourceImage->height()*sin(alpha)-sourceImage->width());
   //  double shiftY=0.5*(sourceImage->width()*sin(alpha)+sourceImage->height()*cos(alpha)-sourceImage->height());
 //    double shiftY=sourceImage->width()*sin(alpha);
@@ -128,11 +127,24 @@ void OptionsView::coordsNearest(int x, int y, int aa)
         xs = r*sin(beta);       //x coord of source image
         ys = r*cos(beta);
 
+    switch(aa/90){
+        case 0: xss = xs;
+                yss = ys;
+                break;
+        case 1: xss = ys;
+                yss = sourceImage->width()-xs;
+                break;
+        case 2: xss = sourceImage->width()-xs;
+                yss = sourceImage->height()-ys;
+                break;
+        case 3: yss = xs;
+                xss = sourceImage->height()-ys;
+                break;
+    }
 
-
-    if(( xs > 0) && (xs < sourceImage->width()) && (ys >0) && (ys <sourceImage->height()))
+    if(( xss > 0) && (xss < sourceImage->width()) && (yss >0) && (yss <sourceImage->height()))
     {
-        int px = sourceImage->pixel(xs,ys);
+        int px = sourceImage->pixel(xss,yss);
         pDestImag->setPixel(x,y,px);
     }
 }
