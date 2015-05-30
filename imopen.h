@@ -28,6 +28,7 @@ public:
     void erode( QImage* tempImag);
 
     void dilate(QImage *tempImag);
+    void openImage(int value);
 };
 
 #endif // IMOPEN_H

@@ -130,41 +130,6 @@ void OptionsView::coordsNearest(int x, int y, int aa)
         int px = sourceImage->pixel(xs,ys);
         pDestImag->setPixel(x,y,px);
     }
-}/*
-void OptionsView::dilate(Imopen* EM, QImage* tempImag)
-{
-    EM->setData(pDestImag);
-    for(int i=0; i < pDestImag->width();i++)
-        for(int j=0; j < pDestImag->height();j++)
-        {
-            if(tempImag->pixel(i,j) == 0xFFFFFFFF)
-            {
-                EM->move(i,j);
-                EM->paintItBlack();
-            }
-        }
-}
-*/
-void OptionsView::openImage()
-{
-    //reinitialize dest image
-    if( pDestImag != NULL)
-        delete pDestImag;
-    QImage* tempImag=new QImage(*sourceImage);
-
-    //create circular element and config it
-    Imopen EM;
-    EM.setRadius( ui->sizeSpinBox->value() );
-    EM.setOptionsViewPtr(this);
-    EM.erode( tempImag);
-
-    //dilatation
-    pDestImag=new QImage(*tempImag);
-    EM.dilate(tempImag);
-
-    //tideup n show
-    delete tempImag;
-    imView->showDestImage(pDestImag);
 }
 
 void OptionsView::nearestInterpolation()
@@ -182,7 +147,6 @@ void OptionsView::nearestInterpolation()
 
 void OptionsView::on_transformButton_clicked()
 {
-    Imopen EM;
     if(ui->nearestButton->isChecked())
     {
         createDestImage(sourceImage->width(),sourceImage->height());
@@ -199,7 +163,10 @@ void OptionsView::on_transformButton_clicked()
 
     if(ui->imopenButton->isChecked())
     {
-        openImage();
+        Imopen EM;
+        EM.setOptionsViewPtr(this);
+        EM.openImage(ui->sizeSpinBox->value());
+        imView->showDestImage(pDestImag);
     }
 }
 

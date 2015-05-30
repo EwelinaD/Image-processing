@@ -166,6 +166,28 @@ void Imopen::dilate( QImage* tempImag)
 
 
 
+void Imopen::openImage(int value )
+{
+    //reinitialize dest image
+    if( opv->pDestImag != NULL)
+        delete opv->pDestImag;
+    QImage tempImag= QImage(*(opv->sourceImage));
+
+    //create circular element and config it
+    setRadius( value );
+ //   setOptionsViewPtr(this);
+    erode( &tempImag);
+
+    //dilatation
+    opv->pDestImag=new QImage(tempImag);
+    dilate(&tempImag);
+
+    //tideup n show
+  //  imView->showDestImage(pDestImag);
+}
+
+
+
 void Imopen::setOptionsViewPtr(OptionsView* op)
 {
     opv=op;
