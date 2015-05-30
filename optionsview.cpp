@@ -53,6 +53,9 @@ void OptionsView::on_loadButton_clicked()
         delete sourceImage;
 
     sourceImage = new QImage(imagePath,0);
+    sourceImage->convertToFormat(QImage::Format_RGB32);
+   // sourceImage = new QImage();
+    //sourceImage->load(imagePath,QImage::Format_RGB32);
     imView->showSourceImage(sourceImage);
     ui->nearestButton->setCheckable(true);
     ui->imopenButton->setCheckable(true);

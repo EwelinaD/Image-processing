@@ -26,7 +26,7 @@ void Imopen::deleteStructure()
     if (structure!=NULL)
     {
 
-        for (int i = 0 ; i < size ; i++ )
+        for (int i = 0 ; i < sizeOfMask ; i++ )
         {
             delete[] structure[i];
             structure[i] = NULL;
@@ -48,15 +48,15 @@ void Imopen::setRadius(int rad)
         return;
     deleteStructure();
 
-    size = 2*rad+1;
+    sizeOfMask = 2*rad+1;
     radius = rad;
 //    cout <<"r="<<radius<<"::"<<rad<<endl;
 //    cout <<"size="<<size<<endl;
 
-    structure = new bool*[size];
-    for (int i = 0 ; i < size ; i++ )
+    structure = new bool*[sizeOfMask];
+    for (int i = 0 ; i < sizeOfMask ; i++ )
     {
-        structure[i]= new bool[size];
+        structure[i]= new bool[sizeOfMask];
     }
 
     for(int i = 0 ; i < rad+1; i++)
@@ -64,15 +64,15 @@ void Imopen::setRadius(int rad)
         {
             bool val=((rad-i)*(rad-i)+(rad-j)*(rad-j)<=rad*rad);
             structure[i][j]=val;
-            structure[size-i-1][j]=val;
-            structure[size-i-1][size-j-1]=val;
-            structure[i][size-j-1]=val;
+            structure[sizeOfMask-i-1][j]=val;
+            structure[sizeOfMask-i-1][sizeOfMask-j-1]=val;
+            structure[i][sizeOfMask-j-1]=val;
  //           cout <<"setting "<<i<<","<<j<<" to" <<(int) val<<endl;
         }
     //debug
-    for(int i = 0 ; i < size; i++)
+    for(int i = 0 ; i < sizeOfMask; i++)
     {
-        for(int j = 0 ; j < size; j++)
+        for(int j = 0 ; j < sizeOfMask; j++)
         {
             if (structure[i][j])
                 cout<<"#";
@@ -90,12 +90,13 @@ void Imopen::paintItBlack()
     if( data == NULL)
         return;
 
-    for(int i = 0 ; i < size; i++)
-        for(int j = 0 ; j < size; j++)
+    for(int i = 0 ; i < sizeOfMask; i++)
+        for(int j = 0 ; j < sizeOfMask; j++)
         {
             if(structure[i][j]==true)
                 if (coordinatesInRange(i+posx-radius-1,j+posy-radius-1))
                 {
+                 //   cout << "A::"<<i+posx-radius-1<<"::"<<j+posy-radius-1<<"::"<<0;
                      data->setPixel(i+posx-radius-1,j+posy-radius-1,0);
                 }
         }
@@ -109,8 +110,8 @@ bool Imopen::checkAnyWhitePixies()
     if( data == NULL)
         return false;
 
-    for(int i = 0 ; i < size; i++)
-        for(int j = 0 ; j < size; j++)
+    for(int i = 0 ; i < sizeOfMask; i++)
+        for(int j = 0 ; j < sizeOfMask; j++)
         {
             if( !coordinatesInRange(i+posx-radius-1,j+posy-radius-1) )
                 continue;
@@ -125,6 +126,34 @@ bool Imopen::checkAnyWhitePixies()
     return false;
 }
 
+
+int Imopen::findMinUnderMask()
+{
+    if( radius == 0 )
+        return false;
+    if( data == NULL)
+        return false;
+
+    minUnderMask=0xFFFFFFFF;
+
+    for(int i = 0 ; i < sizeOfMask; i++)
+        for(int j = 0 ; j < sizeOfMask; j++)
+        {
+            if( !coordinatesInRange(i+posx-radius,j+posy-radius) )
+                continue;
+
+                if(structure[i][j]==true)
+                {
+                    if(minUnderMask>data->pixel(i+posx-radius,j+posy-radius))
+                    {
+                        minUnderMask=data->pixel(i+posx-radius,j+posy-radius);
+                    }
+                }
+        }
+    return minUnderMask;
+}
+
+
 bool Imopen::coordinatesInRange(int x, int y)
 {
     if ((x >0 )&& (x < data->width() )
@@ -137,15 +166,14 @@ bool Imopen::coordinatesInRange(int x, int y)
 
 void Imopen::erode( QImage* tempImag)
 {
+
     setData(opv->sourceImage);
+//    tempImag->convertToFormat(QImage::Format_RGB888);
     for(int i=0; i < opv->sourceImage->width();i++)
         for(int j=0; j < opv->sourceImage->height();j++)
         {
             move(i,j);
-            if( checkAnyWhitePixies() )
-            {
-                tempImag->setPixel(i,j,0xFF000000);
-            }
+            tempImag->setPixel(i,j,findMinUnderMask() );
         }
 }
 
@@ -156,7 +184,7 @@ void Imopen::dilate( QImage* tempImag)
     for(int i=0; i < opv->pDestImag->width();i++)
         for(int j=0; j <  opv->pDestImag->height();j++)
         {
-            if(tempImag->pixel(i,j) == 0xFFFFFFFF)
+            if(tempImag->pixel(i,j) == 0xFF000000)
             {
                 move(i,j);
                 paintItBlack();
@@ -180,7 +208,7 @@ void Imopen::openImage(int value )
 
     //dilatation
     opv->pDestImag=new QImage(tempImag);
-    dilate(&tempImag);
+ //   dilate(&tempImag);
 
     //tideup n show
   //  imView->showDestImage(pDestImag);

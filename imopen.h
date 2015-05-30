@@ -3,16 +3,18 @@
 #include <QPixmap>
 #include <QImage>
 #include <iostream>
+#include <QRgb>
 #include "optionsview.h"
 
 class OptionsView;
 class Imopen
 {
-    int size;
+    int sizeOfMask;
     int radius;
     bool** structure;
     QImage* data;
     int posx,posy;
+    int minUnderMask;
     OptionsView* opv;
     void deleteStructure();
     bool coordinatesInRange(int x, int y);
@@ -29,6 +31,7 @@ public:
 
     void dilate(QImage *tempImag);
     void openImage(int value);
+    int findMinUnderMask();
 };
 
 #endif // IMOPEN_H
