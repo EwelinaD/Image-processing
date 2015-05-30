@@ -12,8 +12,10 @@ int KirschFilter::valueOfCurrentMask()
         value+=(mask[i]*sourceColor[i]);
     }
 
-    if(value<0)
+    if(value<0){
+       // cout <<"A::"<<value<<endl;
         value=(-value);
+    }
 }
 
 KirschFilter::KirschFilter()
@@ -39,9 +41,9 @@ void KirschFilter::executeKirchOnWholeImage()
     *pKFdestImag = new QImage(pKFsrcImage->size(),QImage::Format_RGB32);
 
     QRgb countedValue;
-    for(int i = 1 ; i < pKFsrcImage->width()-1 ;i++ )
+    for(int i = 0 ; i < pKFsrcImage->width() ;i++ )
     {
-        for(int j = 1 ; j < pKFsrcImage->height()-1 ;j++ )
+        for(int j = 0 ; j < pKFsrcImage->height();j++ )
         {
             moveMask(i,j);
             countedValue = getColorValue();
@@ -78,14 +80,19 @@ void KirschFilter::moveMask(int imagX, int imagY)
     x=imagX;
     y=imagY;
 
-    sourceColor[0]=pKFsrcImage->pixel(imagX-1,imagY-1);
-    sourceColor[1]=pKFsrcImage->pixel(imagX,imagY-1);
-    sourceColor[2]=pKFsrcImage->pixel(imagX+1,imagY-1);
-    sourceColor[3]=pKFsrcImage->pixel(imagX-1,imagY);
-    sourceColor[4]=pKFsrcImage->pixel(imagX+1,imagY);
-    sourceColor[5]=pKFsrcImage->pixel(imagX-1,imagY+1);
-    sourceColor[6]=pKFsrcImage->pixel(imagX,imagY+1);
-    sourceColor[7]=pKFsrcImage->pixel(imagX+1,imagY+1);
+    int x0 = (imagX==0)?imagX:imagX-1;
+    int x2 = (imagX==pKFsrcImage->width()-1)?imagX:imagX+1;
+    int y0 = (imagY==0)?imagY:imagY-1;
+    int y2 = (imagY==pKFsrcImage->height()-1)?imagY:imagY+1;
+
+    sourceColor[0]=pKFsrcImage->pixel(x0,y0);
+    sourceColor[1]=pKFsrcImage->pixel(x,y0);
+    sourceColor[2]=pKFsrcImage->pixel(x2,y0);
+    sourceColor[3]=pKFsrcImage->pixel(x2,y);
+    sourceColor[4]=pKFsrcImage->pixel(x2,y2);
+    sourceColor[5]=pKFsrcImage->pixel(x,y2);
+    sourceColor[6]=pKFsrcImage->pixel(x0,y2);
+    sourceColor[7]=pKFsrcImage->pixel(x0,y);
 }
 
 QRgb KirschFilter::getColorValue()
@@ -97,10 +104,12 @@ QRgb KirschFilter::getColorValue()
     {
         valueUnderMask=valueOfCurrentMask();
         nextMask();
+
         if(valueUnderMask>maxValue)
             maxValue=valueUnderMask;
     }
-
+    if(maxValue<0)
+        maxValue=-maxValue;
     return maxValue;
 
 }
