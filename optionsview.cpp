@@ -160,7 +160,7 @@ void OptionsView::dilate(Imopen* EM, QImage* tempImag)
         }
 }
 
-void OptionsView::openYourEyes()
+void OptionsView::openImage()
 {
     //reinitialize dest image
     if( pDestImag != NULL)
@@ -214,7 +214,7 @@ void OptionsView::on_transformButton_clicked()
 
     if(ui->imopenButton->isChecked())
     {
-        openYourEyes();
+        openImage();
     }
 }
 

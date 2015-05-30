@@ -31,7 +31,7 @@ public:
     void createDestImage(int,int);
     void nearestInterpolation();
     void coordsNearest(int,int,int);
-    void openYourEyes();
+    void openImage();
     ~OptionsView();
 
     void erode(Imopen* EM, QImage* tempImag);
