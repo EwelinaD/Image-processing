@@ -18,6 +18,7 @@ class Imopen
     OptionsView* opv;
     void deleteStructure();
     bool coordinatesInRange(int x, int y);
+    void maximizeColorUnderMask(QRgb min_qrgb_int);
 public:
     Imopen();
     ~Imopen();

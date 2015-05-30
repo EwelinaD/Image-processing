@@ -164,6 +164,29 @@ bool Imopen::coordinatesInRange(int x, int y)
     return false;
 }
 
+void Imopen::maximizeColorUnderMask(QRgb min_qrgb_int )
+{
+    if( radius == 0 )
+        return;
+    if( data == NULL)
+        return;
+    for(int i = 0 ; i < sizeOfMask; i++)
+        for(int j = 0 ; j < sizeOfMask; j++)
+        {
+            if(structure[i][j]==true)
+            {
+                if (coordinatesInRange(i+posx-radius,j+posy-radius))
+                {
+                    if( data->pixel(i+posx-radius,j+posy-radius) < min_qrgb_int )
+                    {
+                        data->setPixel(i+posx-radius,j+posy-radius,min_qrgb_int);
+                    }
+
+                }
+            }
+        }
+}
+
 void Imopen::erode( QImage* tempImag)
 {
 
@@ -184,11 +207,13 @@ void Imopen::dilate( QImage* tempImag)
     for(int i=0; i < opv->pDestImag->width();i++)
         for(int j=0; j <  opv->pDestImag->height();j++)
         {
-            if(tempImag->pixel(i,j) == 0xFF000000)
+         /*   if(tempImag->pixel(i,j) == 0xFF000000)
             {
-                move(i,j);
                 paintItBlack();
             }
+            */
+            move(i,j);
+            maximizeColorUnderMask(tempImag->pixel(i,j));
         }
 }
 
@@ -208,7 +233,7 @@ void Imopen::openImage(int value )
 
     //dilatation
     opv->pDestImag=new QImage(tempImag);
- //   dilate(&tempImag);
+    dilate(&tempImag);
 
     //tideup n show
   //  imView->showDestImage(pDestImag);
