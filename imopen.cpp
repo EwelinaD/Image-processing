@@ -1,7 +1,7 @@
-#include "elem_mask.h"
+#include "imopen.h"
 using namespace std;
 
-elem_mask::elem_mask()
+Imopen::Imopen()
 {
     structure=NULL;
     data=NULL;
@@ -10,18 +10,18 @@ elem_mask::elem_mask()
     posy = 0;
 }
 
-elem_mask::~elem_mask()
+Imopen::~Imopen()
 {
     deleteStructure();
 }
 
-void elem_mask::move(int x, int y)
+void Imopen::move(int x, int y)
 {
     posx = x;
     posy = y;
 }
 
-void elem_mask::deleteStructure()
+void Imopen::deleteStructure()
 {
     if (structure!=NULL)
     {
@@ -36,12 +36,12 @@ void elem_mask::deleteStructure()
     }
 }
 
-void elem_mask::setData(QImage *qi)
+void Imopen::setData(QImage *qi)
 {
     data = qi;
 }
 
-void elem_mask::setRadius(int rad)
+void Imopen::setRadius(int rad)
 {
 //    cout <<"r="<<radius<<"::"<<rad<<endl;
     if( rad < 1 )
@@ -83,7 +83,7 @@ void elem_mask::setRadius(int rad)
     }
 }
 
-void elem_mask::paintItBlack()
+void Imopen::paintItBlack()
 {
     if( radius == 0 )
         return;
@@ -101,7 +101,7 @@ void elem_mask::paintItBlack()
         }
 }
 
-bool elem_mask::checkAnyWhitePixies()
+bool Imopen::checkAnyWhitePixies()
 {
 
     if( radius == 0 )
@@ -125,7 +125,7 @@ bool elem_mask::checkAnyWhitePixies()
     return false;
 }
 
-bool elem_mask::coordinatesInRange(int x, int y)
+bool Imopen::coordinatesInRange(int x, int y)
 {
     if ((x >0 )&& (x < data->width() )
        && (y >0 ) && (y < data->height() ))

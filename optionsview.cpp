@@ -1,6 +1,6 @@
 #include "optionsview.h"
 #include "ui_optionsview.h"
-#include "elem_mask.h"
+#include "imopen.h"
 #include "kirschfilter.h"
 
 using namespace std;
@@ -132,7 +132,7 @@ void OptionsView::coordsNearest(int x, int y, int aa)
     }
 }
 
-void OptionsView::erode(elem_mask* EM, QImage* tempImag)
+void OptionsView::erode(Imopen* EM, QImage* tempImag)
 {
     EM->setData(sourceImage);
     for(int i=0; i < sourceImage->width();i++)
@@ -146,7 +146,7 @@ void OptionsView::erode(elem_mask* EM, QImage* tempImag)
         }
 }
 
-void OptionsView::dilate(elem_mask* EM, QImage* tempImag)
+void OptionsView::dilate(Imopen* EM, QImage* tempImag)
 {
     EM->setData(pDestImag);
     for(int i=0; i < pDestImag->width();i++)
@@ -168,7 +168,7 @@ void OptionsView::openYourEyes()
     QImage* tempImag=new QImage(*sourceImage);
 
     //create circular element and config it
-    elem_mask EM;
+    Imopen EM;
     EM.setRadius( ui->sizeSpinBox->value() );
 
     erode(&EM, tempImag);
@@ -197,7 +197,7 @@ void OptionsView::nearestInterpolation()
 
 void OptionsView::on_transformButton_clicked()
 {
-    elem_mask EM;
+    Imopen EM;
     if(ui->nearestButton->isChecked())
     {
         createDestImage(sourceImage->width(),sourceImage->height());

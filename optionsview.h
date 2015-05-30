@@ -9,7 +9,7 @@
 #include <cmath>
 
 #include "imageview.h"
-#include "elem_mask.h"
+#include "imopen.h"
 
 namespace Ui {
 class OptionsView;
@@ -34,8 +34,8 @@ public:
     void openYourEyes();
     ~OptionsView();
 
-    void erode(elem_mask* EM, QImage* tempImag);
-    void dilate(elem_mask* EM, QImage* tempImag);
+    void erode(Imopen* EM, QImage* tempImag);
+    void dilate(Imopen* EM, QImage* tempImag);
 private slots:
     void on_loadButton_clicked();
     void on_nearestButton_clicked(bool checked);
