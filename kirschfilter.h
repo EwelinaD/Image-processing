@@ -20,6 +20,7 @@ private:
 
 
     int valueOfCurrentMask(int channel);       //wylicza wartosc aktualnej maski
+    int getChannelValue(int channel,QRgb source);
 
 
 public:

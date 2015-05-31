@@ -9,13 +9,7 @@ int KirschFilter::valueOfCurrentMask(int channel)
     int x;
     for(int i=0; i<8; i++)
     {
-        if(channel == 0)
-            x = qRed(sourceColor[i]);
-        if(channel == 1)
-            x = qGreen(sourceColor[i]);
-        if(channel == 2)
-            x = qBlue(sourceColor[i]);
-
+        x = getChannelValue(channel,sourceColor[i]);
         value+=(mask[i]*x);
     }
 
@@ -23,6 +17,24 @@ int KirschFilter::valueOfCurrentMask(int channel)
         value=(-value);
     }
     return value;
+}
+
+int KirschFilter::getChannelValue(int channel, QRgb source)
+{
+    int x=0;
+    switch(channel)
+    {
+        case 0:
+            x = qRed(source);
+            break;
+        case 1:
+            x = qGreen(source);
+        break;
+        case 2:
+            x = qBlue(source);
+        break;
+    }
+    return x;
 }
 
 KirschFilter::KirschFilter()
@@ -105,36 +117,25 @@ void KirschFilter::moveMask(int imagX, int imagY)
 QRgb KirschFilter::getColorValue()
 {
     int maxValue=0;
-    int valueUnderMask;
-int rt,gt,bt;
-int rm =0;
-int gm = 0;
-int bm = 0;
+    int tempChannelValues[3];
+    int maxChannelValues[3]={0,0,0};
     for(int i=0; i<8; i++)
     {
-        rt=valueOfCurrentMask(0);
-        if( rm < rt)
-             rm = rt;
-        gt=valueOfCurrentMask(1);
-        if( gm < gt)
-             gm = gt;
-        bt=valueOfCurrentMask(2);
-        if( bm < bt)
-             bm = bt;
-
+        for(int j=0;j<3;j++)
+        {
+            tempChannelValues[j]=valueOfCurrentMask(j);
+            if(maxChannelValues[j]<tempChannelValues[j])
+                maxChannelValues[j]=tempChannelValues[j];
+        }
         nextMask();
-
-  //      if(valueUnderMask>maxValue)
-   //       maxValue=valueUnderMask;
     }
-    if( bm > 0xff)
-         bm = 0xff;
-    if( gm > 0xff)
-         gm = 0xff;
-    if( rm > 0xff)
-         rm = 0xff;
+    for(int j=0;j<3;j++)
+    {
+        if(maxChannelValues[j]>0xff)
+            maxChannelValues[j]=0xff;
+    }
 
-    maxValue=bm+0x100*gm+0x10000*rm;
+    maxValue=maxChannelValues[2]+0x100*maxChannelValues[1]+0x10000*maxChannelValues[0];
     if(maxValue<0)
         maxValue=-maxValue;
     return maxValue;
