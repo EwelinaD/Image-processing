@@ -49,9 +49,12 @@ void OptionsView::on_loadButton_clicked()
 {
     imagePath = QFileDialog::getOpenFileName(this);
 
+    if(imagePath == "")
+    {
+        return;
+    }
     if(sourceImage!=NULL)
         delete sourceImage;
-
  //   sourceImage = new QImage(imagePath,0);
 //    sourceImage->convertToFormat(QImage::Format_RGB32);
     sourceImage = new QImage();
@@ -71,8 +74,8 @@ void OptionsView::on_nearestButton_clicked(bool checked)
 
     else
     {
-        ui->nearestButton->setCheckable(true);
         ui->angleSpinBox->setEnabled(checked);
+        ui->sizeSpinBox->setEnabled(false);
     }
 
 }
@@ -84,7 +87,8 @@ void OptionsView::on_kirschButton_clicked(bool checked)
 
     else
     {
-        ui->kirschButton->setCheckable(true);
+        ui->angleSpinBox->setEnabled(false);
+        ui->sizeSpinBox->setEnabled(false);
     }
 }
 
@@ -96,8 +100,8 @@ void OptionsView::on_imopenButton_clicked(bool checked)
 
     else
     {
-        ui->imopenButton->setCheckable(true);
         ui->sizeSpinBox->setEnabled(checked);
+        ui->angleSpinBox->setEnabled(false);
     }
 }
 
@@ -193,6 +197,12 @@ void OptionsView::on_transformButton_clicked()
 
 void OptionsView::on_saveButton_clicked()
 {
+    if(pDestImag == NULL)
+        return;
     QString imagePath = QFileDialog::getSaveFileName(this);
+    if(imagePath == "")
+    {
+        return;
+    }
     pDestImag->save(imagePath);
 }
