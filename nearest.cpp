@@ -58,3 +58,16 @@ void Nearest::coordsNearest(int x, int y, int aa)
         opv->pDestImag->setPixel(x,y,px);
     }
 }
+
+void Nearest::nearestInterpolation(int angle)
+{
+    int alpha = angle;
+
+       for(int x=0; x<opv->pDestImag->width(); x++)
+       {
+           for(int y=0; y<opv->pDestImag->height(); y++)
+           {
+               coordsNearest(x,y,alpha);
+           }
+       }
+}

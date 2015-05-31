@@ -121,23 +121,6 @@ void OptionsView::on_imopenButton_clicked(bool checked)
     }
 }
 
-
-
-void OptionsView::nearestInterpolation()
-{
-    Nearest nn;
-    nn.setOpv(this);
-    int alpha = ui->angleSpinBox->value();
-
-       for(int x=0; x<pDestImag->width(); x++)
-       {
-           for(int y=0; y<pDestImag->height(); y++)
-           {
-               nn.coordsNearest(x,y,alpha);
-           }
-       }
-}
-
 void OptionsView::on_transformButton_clicked()
 {
     if(ui->nearestButton->isChecked())
@@ -145,7 +128,7 @@ void OptionsView::on_transformButton_clicked()
         Nearest nn;
         nn.setOpv(this);
         createDestImage(sourceImage->width(),sourceImage->height());
-        nearestInterpolation();
+        nn.nearestInterpolation(ui->angleSpinBox->value());
         imView->showDestImage(pDestImag);
     }
 
@@ -156,7 +139,6 @@ void OptionsView::on_transformButton_clicked()
         kf.setKFdestImag(&pDestImag);
         kf.executeKirchOnWholeImage();
         imView->showDestImage(pDestImag);
-
 
     }
 

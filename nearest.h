@@ -16,6 +16,7 @@ public:
     OptionsView* opv;
     void setOpv(OptionsView* ov);
     void coordsNearest(int x, int y, int aa);
+    void nearestInterpolation(int angle);
 };
 
 #endif // NEAREST_H
