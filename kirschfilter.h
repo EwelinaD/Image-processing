@@ -19,7 +19,7 @@ private:
     QRgb sourceColor[8];        //odpowiadaja pikselom w masce
 
 
-    int valueOfCurrentMask();       //wylicza wartosc aktualnej maski
+    int valueOfCurrentMask(int channel);       //wylicza wartosc aktualnej maski
 
 
 public:

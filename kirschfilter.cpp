@@ -3,19 +3,26 @@
 using namespace std;
 
 
-int KirschFilter::valueOfCurrentMask()
+int KirschFilter::valueOfCurrentMask(int channel)
 {
     int value=0;
-
+    int x;
     for(int i=0; i<8; i++)
     {
-        value+=(mask[i]*sourceColor[i]);
+        if(channel == 0)
+            x = qRed(sourceColor[i]);
+        if(channel == 1)
+            x = qGreen(sourceColor[i]);
+        if(channel == 2)
+            x = qBlue(sourceColor[i]);
+
+        value+=(mask[i]*x);
     }
 
     if(value<0){
-       // cout <<"A::"<<value<<endl;
         value=(-value);
     }
+    return value;
 }
 
 KirschFilter::KirschFilter()
@@ -28,7 +35,6 @@ KirschFilter::KirschFilter()
 
 void KirschFilter::executeKirchOnWholeImage()
 {
-
     if( pKFsrcImage == NULL)
         return;
 
@@ -85,6 +91,7 @@ void KirschFilter::moveMask(int imagX, int imagY)
     int y0 = (imagY==0)?imagY:imagY-1;
     int y2 = (imagY==pKFsrcImage->height()-1)?imagY:imagY+1;
 
+
     sourceColor[0]=pKFsrcImage->pixel(x0,y0);
     sourceColor[1]=pKFsrcImage->pixel(x,y0);
     sourceColor[2]=pKFsrcImage->pixel(x2,y0);
@@ -99,32 +106,35 @@ QRgb KirschFilter::getColorValue()
 {
     int maxValue=0;
     int valueUnderMask;
-
+int rt,gt,bt;
+int rm =0;
+int gm = 0;
+int bm = 0;
     for(int i=0; i<8; i++)
     {
-        valueUnderMask=valueOfCurrentMask();
+        rt=valueOfCurrentMask(0);
+        if( rm < rt)
+             rm = rt;
+        gt=valueOfCurrentMask(1);
+        if( gm < gt)
+             gm = gt;
+        bt=valueOfCurrentMask(2);
+        if( bm < bt)
+             bm = bt;
+
         nextMask();
-      //  maxValue = maxColorByChannels(valueUnderMask,maxValue);
-/*
-        if ( (valueUnderMask & 0x00ff0000) >  (maxValue & 0x00ff0000) )
-        {
-           maxValue &= 0x0000FFFF;
-           maxValue += valueUnderMask & 0x00ff0000 ;
-        }
-        if ( (valueUnderMask & 0x0000ff00) >  (maxValue & 0x0000ff00) )
-        {
-            maxValue &= 0x00FF00FF;
-            maxValue += valueUnderMask & 0x0000ff00 ;
-        }
-        if ( (valueUnderMask & 0x000000ff) >  (maxValue & 0x000000ff) )
-        {
-            maxValue &= 0x00FFFF00;
-            maxValue += valueUnderMask & 0x000000ff ;
-        }
-        maxValue = valueUnderMask ^0xffffffff ;*/
-        if(valueUnderMask>maxValue)
-            maxValue=valueUnderMask;
+
+  //      if(valueUnderMask>maxValue)
+   //       maxValue=valueUnderMask;
     }
+    if( bm > 0xff)
+         bm = 0xff;
+    if( gm > 0xff)
+         gm = 0xff;
+    if( rm > 0xff)
+         rm = 0xff;
+
+    maxValue=bm+0x100*gm+0x10000*rm;
     if(maxValue<0)
         maxValue=-maxValue;
     return maxValue;
@@ -136,32 +146,6 @@ void KirschFilter::setKFdestImag(QImage **im)
     pKFdestImag=im;
 }
 
-int KirschFilter::maxColorByChannels(int aa, int bb)
-{
-    int r,g,b;
-   // QRgb aa = QRbg(aaa);
- //   QRgb bb = QRbg(bbb);
-    QRgb maxed;
-
-    if ( (aa & 0x00ff0000) >  (bb & 0x00ff0000) )
-        r = aa & 0x00ff0000 ;
-    else
-        r = bb & 0x00ff0000 ;
-
-    if ( (aa & 0x0000ff00 )>  (bb & 0x0000ff00 ))
-        g = aa & 0x0000ff00;
-    else
-        g =  bb & 0x0000ff00;
-
-
-    if ( (aa & 0x000000ff )>  (bb & 0x000000ff) )
-       b=  aa & 0x000000ff;
-    else
-        b= bb & 0x000000ff;
-
-
-    return 0xffffffff - r-g-b;
-}
 
 
 void KirschFilter::setKFsrcImage(QImage *im)
