@@ -18,14 +18,16 @@ SOURCES += main.cpp\
     optionsview.cpp \
     kirschfilter.cpp \
     imopen.cpp \
-    geodistance.cpp
+    geodistance.cpp \
+    nearest.cpp
 
 HEADERS  += mainwindow.h \
     imageview.h \
     optionsview.h \
     kirschfilter.h \
     imopen.h \
-    geodistance.h
+    geodistance.h \
+    nearest.h
 
 FORMS    += mainwindow.ui \
     imageview.ui \

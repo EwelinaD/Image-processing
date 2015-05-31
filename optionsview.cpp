@@ -2,6 +2,7 @@
 #include "ui_optionsview.h"
 #include "imopen.h"
 #include "kirschfilter.h"
+#include "nearest.h"
 
 using namespace std;
 
@@ -120,63 +121,19 @@ void OptionsView::on_imopenButton_clicked(bool checked)
     }
 }
 
-void OptionsView::coordsNearest(int x, int y, int aa)
-{
-    double xs,ys,xss,yss;
-    double alpha = -(double)(aa%90)*0.017454;
-    double shiftX=0.5*(sourceImage->width()*cos(alpha)+sourceImage->height()*sin(alpha)-sourceImage->width());
-  //  double shiftY=0.5*(sourceImage->width()*sin(alpha)+sourceImage->height()*cos(alpha)-sourceImage->height());
-//    double shiftY=sourceImage->width()*sin(alpha);
-    double shiftY=0.5*(sourceImage->width()*sin(alpha)+(1-cos(alpha))*sourceImage->height());
 
-    shiftX=x+shiftX;
-   shiftY=y-shiftY;
-
-
-    double r = sqrt(shiftX*shiftX+shiftY*shiftY);
-    double beta = atan((double)shiftX/shiftY)-alpha;
-
-
-
-    if(beta<0)
-    {
-        beta+=3.14;
-    }
-
-        xs = r*sin(beta);       //x coord of source image
-        ys = r*cos(beta);
-
-    switch(aa/90){
-        case 0: xss = xs;
-                yss = ys;
-                break;
-        case 1: xss = ys;
-                yss = sourceImage->width()-xs;
-                break;
-        case 2: xss = sourceImage->width()-xs;
-                yss = sourceImage->height()-ys;
-                break;
-        case 3: yss = xs;
-                xss = sourceImage->height()-ys;
-                break;
-    }
-
-    if(( xss > 0) && (xss < sourceImage->width()) && (yss >0) && (yss <sourceImage->height()))
-    {
-        int px = sourceImage->pixel(xss,yss);
-        pDestImag->setPixel(x,y,px);
-    }
-}
 
 void OptionsView::nearestInterpolation()
 {
+    Nearest nn;
+    nn.setOpv(this);
     int alpha = ui->angleSpinBox->value();
 
        for(int x=0; x<pDestImag->width(); x++)
        {
            for(int y=0; y<pDestImag->height(); y++)
            {
-               coordsNearest(x,y,alpha);
+               nn.coordsNearest(x,y,alpha);
            }
        }
 }
@@ -185,6 +142,8 @@ void OptionsView::on_transformButton_clicked()
 {
     if(ui->nearestButton->isChecked())
     {
+        Nearest nn;
+        nn.setOpv(this);
         createDestImage(sourceImage->width(),sourceImage->height());
         nearestInterpolation();
         imView->showDestImage(pDestImag);
