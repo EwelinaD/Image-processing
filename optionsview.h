@@ -8,6 +8,7 @@
 #include <QGroupBox>
 #include <cmath>
 
+#include "geodistance.h"
 #include "imageview.h"
 #include "imopen.h"
 
@@ -46,6 +47,8 @@ private slots:
     void on_transformButton_clicked();
     void on_imopenButton_clicked(bool checked);
     void on_saveButton_clicked();
+
+    void on_distanceButton_clicked(bool checked);
 
 private:
     Ui::OptionsView *ui;

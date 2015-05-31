@@ -19,6 +19,11 @@ OptionsView::OptionsView(QWidget *parent) :
     ui->nearestButton->setCheckable(false);
     ui->kirschButton->setCheckable(false);
     ui->imopenButton->setCheckable(false);
+    ui->distanceButton->setCheckable(false);
+    ui->xSpinBox->setMinimum(0);
+    ui->ySpinBox->setMinimum(0);
+    ui->xSpinBox->setDisabled(true);
+    ui->ySpinBox->setDisabled(true);
 }
 
 OptionsView::~OptionsView()
@@ -64,6 +69,10 @@ void OptionsView::on_loadButton_clicked()
     ui->nearestButton->setCheckable(true);
     ui->imopenButton->setCheckable(true);
     ui->kirschButton->setCheckable(true);
+    ui->distanceButton->setCheckable(true);
+
+    ui->xSpinBox->setMaximum(sourceImage->width()-1);
+    ui->ySpinBox->setMaximum(sourceImage->height()-1);
 
 }
 
@@ -76,6 +85,8 @@ void OptionsView::on_nearestButton_clicked(bool checked)
     {
         ui->angleSpinBox->setEnabled(checked);
         ui->sizeSpinBox->setEnabled(false);
+        ui->xSpinBox->setDisabled(true);
+        ui->ySpinBox->setDisabled(true);
     }
 
 }
@@ -89,6 +100,8 @@ void OptionsView::on_kirschButton_clicked(bool checked)
     {
         ui->angleSpinBox->setEnabled(false);
         ui->sizeSpinBox->setEnabled(false);
+        ui->xSpinBox->setDisabled(true);
+        ui->ySpinBox->setDisabled(true);
     }
 }
 
@@ -102,6 +115,8 @@ void OptionsView::on_imopenButton_clicked(bool checked)
     {
         ui->sizeSpinBox->setEnabled(checked);
         ui->angleSpinBox->setEnabled(false);
+        ui->xSpinBox->setDisabled(true);
+        ui->ySpinBox->setDisabled(true);
     }
 }
 
@@ -193,6 +208,15 @@ void OptionsView::on_transformButton_clicked()
         EM.openImage(ui->sizeSpinBox->value());
         imView->showDestImage(pDestImag);
     }
+
+    if(ui->distanceButton->isChecked())
+    {
+        GeoDistance GD;
+        GD.setImages( sourceImage, &pDestImag );
+        GD.processImage(ui->xSpinBox->value(),ui->ySpinBox->value(),ui->neighbourhoodList->currentIndex());
+        imView->showDestImage(pDestImag);
+      //  cout << "idx:"<<ui->neighbourhoodList->currentIndex()<<endl;
+    }
 }
 
 void OptionsView::on_saveButton_clicked()
@@ -205,4 +229,13 @@ void OptionsView::on_saveButton_clicked()
         return;
     }
     pDestImag->save(imagePath);
+}
+
+void OptionsView::on_distanceButton_clicked(bool checked)
+{
+
+    ui->xSpinBox->setEnabled(checked);
+    ui->ySpinBox->setEnabled(checked);
+    ui->angleSpinBox->setEnabled(false);
+    ui->sizeSpinBox->setEnabled(false);
 }

@@ -17,13 +17,15 @@ SOURCES += main.cpp\
     imageview.cpp \
     optionsview.cpp \
     kirschfilter.cpp \
-    imopen.cpp
+    imopen.cpp \
+    geodistance.cpp
 
 HEADERS  += mainwindow.h \
     imageview.h \
     optionsview.h \
     kirschfilter.h \
-    imopen.h
+    imopen.h \
+    geodistance.h
 
 FORMS    += mainwindow.ui \
     imageview.ui \
